@@ -1,5 +1,7 @@
 import csv
 import os
+from gui import gui_browse
+
 
 def slice_csv(input_csv, names_txt):
     # Extract the base name from the input CSV file
@@ -24,7 +26,37 @@ def slice_csv(input_csv, names_txt):
 
             print(f"Created {output_csv_name}")
 
+# Set the path to the INPUT folder
+input_folder_path = 'INPUT/'
+
+# Initialize variables to store the paths of the files
+input_csv = None
+names_txt = None
+
+# Loop through each file in the INPUT directory
+for file in os.listdir(input_folder_path):
+    # Check if the file is a CSV file
+    if file.endswith('.csv'):
+        input_csv = os.path.join(input_folder_path, file)
+        print(f"Found CSV file: {input_csv}")
+    
+    # Check if the file is a TXT file
+    elif file.endswith('.txt'):
+        names_txt = os.path.join(input_folder_path, file)
+        print(f"Found TXT file: {names_txt}")
+
+# Check if both files were found
+if input_csv and names_txt:
+    print("Both files found.")
+    slice_csv(input_csv, names_txt)
+else:
+    print("One or both files are missing.")
+
+
+
+
+
 # Example usage
-input_csv = "INPUT/exp5b_celloS67_ts.csv"
-names_txt = "INPUT/exp5b_celloS68.txt"
-slice_csv(input_csv, names_txt)
+# input_csv = "INPUT/exp5b_celloS67_ts.csv"
+# names_txt = "INPUT/exp5b_celloS68.txt"
+# slice_csv(input_csv, names_txt)
