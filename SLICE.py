@@ -1,6 +1,6 @@
 import csv
 import os
-from gui import gui_browse
+# from gui import gui_browse
 
 
 def slice_csv(input_csv, names_txt):
