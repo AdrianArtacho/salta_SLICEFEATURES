@@ -1,6 +1,7 @@
 import csv
 import os
-# from gui import gui_browse
+import gui.gui_browse as gui_browse
+import gui.gui_enterstring as gui_enterstring
 
 
 def slice_csv(input_csv, names_txt):
@@ -8,16 +9,35 @@ def slice_csv(input_csv, names_txt):
     base_name = os.path.splitext(os.path.basename(input_csv))[0]
 
     # Read the names from the text file
+    # with open(names_txt, 'r') as names_file:
+    #     names = [name.strip() for name in names_file.readlines()]
+
     with open(names_txt, 'r') as names_file:
-        names = [name.strip() for name in names_file.readlines()]
+        names = [name.strip() for name in names_file.readlines() if not name.startswith('>')] # exclude lines starting with the character '>'
+
+    print("input_csv", input_csv)
+    # exit()
 
     # Read the input CSV file
     with open(input_csv, 'r') as csv_file:
         csv_reader = csv.reader(csv_file)
         header = next(csv_reader)  # Assuming first row is the header
 
+        # print("names", names)
+
+        # print(enumerate(csv_reader))
+        # exit()
+        # print()
+
         # For each row in the CSV file, create a new CSV file with one row
         for i, row in enumerate(csv_reader):
+            try:
+                name = names[i]
+            except IndexError:
+                print(f"Index {i} is out of range for the 'names' list.")
+                continue  # Skip this iteration and move to the next one
+
+            print("number [i]", i, "names[i]:", names[i])
             output_csv_name = f"{base_name}_{names[i]}.csv"
             with open("OUTPUT/"+output_csv_name, 'w', newline='') as output_csv:
                 csv_writer = csv.writer(output_csv)
@@ -26,8 +46,64 @@ def slice_csv(input_csv, names_txt):
 
             print(f"Created {output_csv_name}")
 
+
+def trim_path(path, middle_folder="INPUT/"):
+    # path = "/Users/artacho/Work/Dissertation/CODE/salta/slicefeatures/INPUT/exp5b_mpipe-L/exp5_crop-L_renamedcolsS16_ts.csv"
+    parts = path.split(middle_folder)
+    if len(parts) > 1:
+        before_input, after_input = parts[0], middle_folder + parts[1]
+        print("Before 'INPUT/':", before_input)
+        print("After 'INPUT/':", after_input)
+    else:
+        print("The string does not contain 'INPUT/'.")
+    
+    return before_input, after_input
+
+def figure_out_folder_path(path, verbose=False):
+    print("input_folder_path", path)
+    # exit()
+
+    browse_path = gui_browse.main(params_title='Browse files', 
+            params_initbrowser=input_folder_path,
+            params_extensions='.csv',               # E.g. '.csv'
+            size=(40,20))
+    
+    if verbose:
+        print("browse_path", browse_path)
+
+    before_input, after_input = trim_path(browse_path, middle_folder="INPUT/")
+
+    if verbose:
+        print("before_input", before_input)
+        print("after_input", after_input)
+
+    directory_path = os.path.dirname(after_input)
+
+    if verbose:
+        print("Directory path:", directory_path)
+
+    return directory_path
+
+
+def path_string_beginning(file_path, verbose=False):
+
+    if verbose:
+        print("input_csv, file_path", file_path)
+    
+    # file_path = "INPUT/exp5_crop-L_renamedcolsS16_ts.csv"
+    substring = file_path.split('_')[0].split('/')[-1]
+    print(substring)
+    return substring
+
+
 # Set the path to the INPUT folder
 input_folder_path = 'INPUT/'
+directory_path = figure_out_folder_path(input_folder_path)
+
+print("directory_path:", directory_path)
+# exit()
+
+# input_folder_path = directory_path
 
 # Initialize variables to store the paths of the files
 input_csv = None
@@ -53,10 +129,13 @@ else:
     print("One or both files are missing.")
 
 
+suggested_string = path_string_beginning(input_csv)
+
+ssdvsd = gui_enterstring.main("text_explanation", "text_enter", "text_window", 
+         font = ("Arial", 16), default_text=suggested_string, 
+         verbose=False)
 
 
 
-# Example usage
-# input_csv = "INPUT/exp5b_celloS67_ts.csv"
-# names_txt = "INPUT/exp5b_celloS68.txt"
-# slice_csv(input_csv, names_txt)
+
+print(ssdvsd)
