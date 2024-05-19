@@ -93,11 +93,12 @@ def figure_out_folder_path(path, verbose=False):
     return directory_path
 
 
-def path_string_beginning(file_path, verbose=False):
+def path_string_beginning(file_path, verbose=True):
 
     if verbose:
         print("input_csv, file_path", file_path)
     
+    # exit()
     # file_path = "INPUT/exp5_crop-L_renamedcolsS16_ts.csv"
     substring = file_path.split('_')[0].split('/')[-1]
 
@@ -115,7 +116,7 @@ directory_path = figure_out_folder_path(input_folder_path)
 print("directory_path:", directory_path)
 # exit()
 
-# input_folder_path = directory_path
+input_folder_path = directory_path
 
 # Initialize variables to store the paths of the files
 input_csv = None
@@ -140,19 +141,16 @@ if input_csv and names_txt:
 else:
     print("One or both files are missing.")
 
+# print("input_csv", input_csv)
+# exit()
 
-# exit()
 suggested_string = path_string_beginning(input_csv)
-# exit()
 
 entered_string = gui_enterstring.main("text_explanation", "text_enter", "text_window", 
          font = ("Arial", 16), default_text=suggested_string, 
          verbose=False)
 
-# exit()
 create_folder.main(entered_string, local_folder = output_folder_path)
-
-# exit()entered_string
 
 for file in list_of_files:
     relative_path = output_folder_path+'/'+file
@@ -160,9 +158,4 @@ for file in list_of_files:
     copy_file.main(relative_path, output_folder_path, entered_string)
 
     delete_file.main(relative_path)
-
-# working_json_filepath = "INPUT/testu51/testu51_json.json"
-#     destination_folder = "INTER"
-#     destination_subfolder = "testu51"
-#     main(working_json_filepath, destination_folder, destination_subfolder)
 
