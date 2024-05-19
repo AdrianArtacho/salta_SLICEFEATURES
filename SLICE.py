@@ -2,9 +2,12 @@ import csv
 import os
 import gui.gui_browse as gui_browse
 import gui.gui_enterstring as gui_enterstring
+import pyt.paths.create_folder as create_folder
+import pyt.paths.copy_file as copy_file
+import pyt.paths.delete_file as delete_file
 
 
-def slice_csv(input_csv, names_txt):
+def slice_csv(input_csv, names_txt, output_path='OUTPUT'):
     # Extract the base name from the input CSV file
     base_name = os.path.splitext(os.path.basename(input_csv))[0]
 
@@ -17,6 +20,8 @@ def slice_csv(input_csv, names_txt):
 
     print("input_csv", input_csv)
     # exit()
+
+    list_of_created_files = []
 
     # Read the input CSV file
     with open(input_csv, 'r') as csv_file:
@@ -39,12 +44,15 @@ def slice_csv(input_csv, names_txt):
 
             print("number [i]", i, "names[i]:", names[i])
             output_csv_name = f"{base_name}_{names[i]}.csv"
-            with open("OUTPUT/"+output_csv_name, 'w', newline='') as output_csv:
+            with open(output_path+"/"+output_csv_name, 'w', newline='') as output_csv:
                 csv_writer = csv.writer(output_csv)
                 csv_writer.writerow(header)
                 csv_writer.writerow(row)
 
             print(f"Created {output_csv_name}")
+            list_of_created_files.append(output_csv_name)
+    
+    return list_of_created_files
 
 
 def trim_path(path, middle_folder="INPUT/"):
@@ -92,12 +100,16 @@ def path_string_beginning(file_path, verbose=False):
     
     # file_path = "INPUT/exp5_crop-L_renamedcolsS16_ts.csv"
     substring = file_path.split('_')[0].split('/')[-1]
-    print(substring)
+
+    if verbose:
+        print(substring)
+    
     return substring
 
-
+###############################################
 # Set the path to the INPUT folder
 input_folder_path = 'INPUT/'
+output_folder_path = 'OUTPUT'
 directory_path = figure_out_folder_path(input_folder_path)
 
 print("directory_path:", directory_path)
@@ -124,18 +136,33 @@ for file in os.listdir(input_folder_path):
 # Check if both files were found
 if input_csv and names_txt:
     print("Both files found.")
-    slice_csv(input_csv, names_txt)
+    list_of_files = slice_csv(input_csv, names_txt, output_path=output_folder_path)
 else:
     print("One or both files are missing.")
 
 
+# exit()
 suggested_string = path_string_beginning(input_csv)
+# exit()
 
-ssdvsd = gui_enterstring.main("text_explanation", "text_enter", "text_window", 
+entered_string = gui_enterstring.main("text_explanation", "text_enter", "text_window", 
          font = ("Arial", 16), default_text=suggested_string, 
          verbose=False)
 
+# exit()
+create_folder.main(entered_string, local_folder = output_folder_path)
 
+# exit()entered_string
 
+for file in list_of_files:
+    relative_path = output_folder_path+'/'+file
+    print(relative_path)
+    copy_file.main(relative_path, output_folder_path, entered_string)
 
-print(ssdvsd)
+    delete_file.main(relative_path)
+
+# working_json_filepath = "INPUT/testu51/testu51_json.json"
+#     destination_folder = "INTER"
+#     destination_subfolder = "testu51"
+#     main(working_json_filepath, destination_folder, destination_subfolder)
+
