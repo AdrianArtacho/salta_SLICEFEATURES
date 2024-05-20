@@ -5,6 +5,7 @@ import gui.gui_enterstring as gui_enterstring
 import pyt.paths.create_folder as create_folder
 import pyt.paths.copy_file as copy_file
 import pyt.paths.delete_file as delete_file
+import gui.gui_menu as gui_menu
 
 
 def slice_csv(input_csv, names_txt, output_path='OUTPUT'):
@@ -55,29 +56,44 @@ def slice_csv(input_csv, names_txt, output_path='OUTPUT'):
     return list_of_created_files
 
 
-def trim_path(path, middle_folder="INPUT/"):
+def trim_path(path, middle_folder="INPUT/", alternative_folder="OUTPUT/"):
     # path = "/Users/artacho/Work/Dissertation/CODE/salta/slicefeatures/INPUT/exp5b_mpipe-L/exp5_crop-L_renamedcolsS16_ts.csv"
     parts = path.split(middle_folder)
     if len(parts) > 1:
-        before_input, after_input = parts[0], middle_folder + parts[1]
-        print("Before 'INPUT/':", before_input)
-        print("After 'INPUT/':", after_input)
+        # before_input, after_input = parts[0], middle_folder + parts[1]
+        before_folder, after_folder = parts[0], middle_folder + parts[1]
+        # print("Before 'INPUT/':", before_input)
+        # print("After 'INPUT/':", after_input)
+        print(f"Before '{middle_folder}':", before_folder)
+        print(f"After '{middle_folder}':", after_folder)
     else:
-        print("The string does not contain 'INPUT/'.")
+        parts = path.split(alternative_folder)
+        if len(parts) > 1:
+            before_folder, after_folder = parts[0], alternative_folder + parts[1]
+            print(f"Before '{alternative_folder}':", before_folder)
+            print(f"After '{alternative_folder}':", after_folder)
+        else:
+            print(f"The string does not contain '{middle_folder}' or '{alternative_folder}'.")
+            return None, None
     
-    return before_input, after_input
+    return before_folder, after_folder
+        # print("The string does not contain 'INPUT/'.")
+    
+    # return before_input, after_input
 
-def figure_out_folder_path(path, verbose=False):
+def figure_out_folder_path(path, verbose=True):
     print("input_folder_path", path)
     # exit()
 
     browse_path = gui_browse.main(params_title='Browse files', 
-            params_initbrowser=input_folder_path,
-            params_extensions='.csv',               # E.g. '.csv'
+            params_initbrowser=path,           # params_initbrowser=input_folder_path,
+            params_extensions='.csv',                       # E.g. '.csv'
             size=(40,20))
     
+    # exit()
     if verbose:
         print("browse_path", browse_path)
+    # exit()
 
     before_input, after_input = trim_path(browse_path, middle_folder="INPUT/")
 
@@ -111,12 +127,27 @@ def path_string_beginning(file_path, verbose=True):
 # Set the path to the INPUT folder
 input_folder_path = 'INPUT/'
 output_folder_path = 'OUTPUT'
-directory_path = figure_out_folder_path(input_folder_path)
+
+menu_choice_options = [input_folder_path, '../prepcsv/OUTPUT/']
+menu_choice_gui = gui_menu.main(menu_choice_options, 
+                                'choose one of the following options', 
+                                'Listbox Example')
+
+print("menu_choice_gui:", menu_choice_gui)
+# exit()
+
+########
+
+directory_path = figure_out_folder_path(menu_choice_gui)
 
 print("directory_path:", directory_path)
 # exit()
 
 input_folder_path = directory_path
+print("input_folder_path", input_folder_path)
+
+
+# create_folder.main(entered_string, local_folder = output_folder_path)
 
 # Initialize variables to store the paths of the files
 input_csv = None
