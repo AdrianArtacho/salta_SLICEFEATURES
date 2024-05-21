@@ -106,7 +106,7 @@ def figure_out_folder_path(path, verbose=True):
     if verbose:
         print("Directory path:", directory_path)
 
-    return directory_path
+    return directory_path, before_input, after_input
 
 
 def path_string_beginning(file_path, verbose=True):
@@ -138,12 +138,12 @@ print("menu_choice_gui:", menu_choice_gui)
 
 ########
 
-directory_path = figure_out_folder_path(menu_choice_gui)
+directory_path, before_input, after_input = figure_out_folder_path(menu_choice_gui)
 
 print("directory_path:", directory_path)
 # exit()
 
-input_folder_path = directory_path
+input_folder_path = before_input+directory_path # AAB
 print("input_folder_path", input_folder_path)
 
 
@@ -152,6 +152,10 @@ print("input_folder_path", input_folder_path)
 # Initialize variables to store the paths of the files
 input_csv = None
 names_txt = None
+
+print("input_folder_path:", input_folder_path)
+print("before_input:", before_input)
+# exit()
 
 # Loop through each file in the INPUT directory
 for file in os.listdir(input_folder_path):
