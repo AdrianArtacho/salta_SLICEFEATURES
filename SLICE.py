@@ -6,6 +6,7 @@ import pyt.paths.create_folder as create_folder
 import pyt.paths.copy_file as copy_file
 import pyt.paths.delete_file as delete_file
 import gui.gui_menu as gui_menu
+import copyover
 
 
 def slice_csv(input_csv, names_txt, output_path='OUTPUT'):
@@ -194,3 +195,6 @@ for file in list_of_files:
 
     delete_file.main(relative_path)
 
+### Copying over files to the /INPUT folder of 'MotionSegmentation''
+
+copyover.main()
