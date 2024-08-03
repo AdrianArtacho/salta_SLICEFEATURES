@@ -17,7 +17,7 @@ def main(folder_to_copyover, local_folder='OUTPUT',
     
     # exit()
     new_folder_name = gui_enterstring.main("Enter the name for the set", "Enter set name:", "sliced features", 
-         font = ("Arial", 16), default_text=folder_to_copyover+"_SLICED", 
+         font = ("Arial", 16), default_text=folder_to_copyover, 
          verbose=False)
 
     if verbose:

@@ -8,6 +8,7 @@ import pyt.paths.delete_file as delete_file
 import gui.gui_menu as gui_menu
 import copyover
 
+verbose=True
 
 def slice_csv(input_csv, names_txt, output_path='OUTPUT'):
     # Extract the base name from the input CSV file
@@ -82,7 +83,7 @@ def trim_path(path, middle_folder="INPUT/", alternative_folder="OUTPUT/"):
     
     # return before_input, after_input
 
-def figure_out_folder_path(path, verbose=True):
+def figure_out_folder_path(path, verbose=verbose):
     print("input_folder_path", path)
     # exit()
 
@@ -110,7 +111,7 @@ def figure_out_folder_path(path, verbose=True):
     return directory_path, before_input, after_input
 
 
-def path_string_beginning(file_path, verbose=True):
+def path_string_beginning(file_path, verbose=verbose):
 
     if verbose:
         print("input_csv, file_path", file_path)
@@ -182,9 +183,13 @@ else:
 
 suggested_string = path_string_beginning(input_csv)
 
+if verbose:
+    print("suggested_string:", suggested_string)
+
+# exit()
 entered_string = gui_enterstring.main("text_explanation", "text_enter", "text_window", 
-         font = ("Arial", 16), default_text=suggested_string, 
-         verbose=False)
+         font = ("Arial", 16), default_text=suggested_string+"_feat_?_SLICED", 
+         verbose=verbose)
 
 create_folder.main(entered_string, local_folder = output_folder_path)
 
@@ -197,4 +202,7 @@ for file in list_of_files:
 
 ### Copying over files to the /INPUT folder of 'MotionSegmentation''
 
-copyover.main()
+if verbose:
+    print("relative_path", relative_path, "output_folder_path", output_folder_path, "entered_string", entered_string)
+
+copyover.main(entered_string)
