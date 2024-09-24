@@ -1,11 +1,11 @@
 import csv
 import os
-import gui.gui_browse as gui_browse
-import gui.gui_enterstring as gui_enterstring
+import gui.gui_browse_t as gui_browse
+import gui.gui_enterstring_t as gui_enterstring
 import pyt.paths.create_folder as create_folder
 import pyt.paths.copy_file as copy_file
 import pyt.paths.delete_file as delete_file
-import gui.gui_menu as gui_menu
+import gui.gui_menu_t as gui_menu
 import copyover
 
 verbose=True
@@ -90,7 +90,8 @@ def figure_out_folder_path(path, verbose=verbose):
     browse_path = gui_browse.main(params_title='Browse files', 
             params_initbrowser=path,           # params_initbrowser=input_folder_path,
             params_extensions='.csv',                       # E.g. '.csv'
-            size=(40,20))
+            # size=(40,20)
+            )
     
     # exit()
     if verbose:

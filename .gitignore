@@ -52,5 +52,8 @@ Thumbs.db
 .venv/
 
 # Leave out INPUT/OUTPUT folders
-INPUT/
-OUTPUT/
+INPUT/*
+!INPUT/.gitkeep
+
+OUTPUT/*
+!OUTPUT/.gitkeep
